@@ -6,7 +6,6 @@ class Boot:
     pass;
 
   def boot(self):
-    print("Booting!")
 
     runner = Runner()
     runner.run()

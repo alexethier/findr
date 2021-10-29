@@ -9,11 +9,8 @@ class Loader:
     self._file_filter_tokens = []
 
   def run(self):
-    print("loader - hi")
 
     parser = argparse.ArgumentParser(description='Refactor tokens in a project.')
-    parser.add_argument('-f', nargs='+', required=True, help='List of find tokens.')
-    parser.add_argument('-r', nargs='+', required=True, help='List of replace tokens.')
     parser.add_argument('-v', action='store_true', help='Output INFO logging.')
     parser.add_argument('-vv', action='store_true', help='Output DEBUG logging.')
     #parser.add_argument('file_filter', metavar='file_filter', type=str, nargs='*',
@@ -52,9 +49,6 @@ class Loader:
         parser.parse_args()
         break
 
-    self._find_tokens = args.f
-    self._replace_tokens = args.r
-
   def _load_file_filter_token(self, input_key, token):
     input_chars = [char for char in input_key]
 
@@ -79,9 +73,3 @@ class Loader:
 
   def get_file_filter_tokens(self):
     return self._file_filter_tokens
-
-  def get_find_tokens(self):
-    return self._find_tokens
-
-  def get_replace_tokens(self):
-    return self._replace_tokens

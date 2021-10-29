@@ -8,7 +8,6 @@ class Runner:
     pass;
 
   def run(self):
-    print("Running!")
 
     loader = Loader()
     loader.run()
@@ -18,10 +17,10 @@ class Runner:
       
 
     find = Find()
-    file_matches = findr.find(".", file_filter_tokens)
+    file_matches = find.find(".", file_filter_tokens)
 
     for file_match in file_matches:
-      logging.info("Found file: " + file_match)
+      print(file_match)
 
 def main():
   runner = Runner()
