@@ -22,3 +22,7 @@ class Runner:
 
     for file_match in file_matches:
       logging.info("Found file: " + file_match)
+
+def main():
+  runner = Runner()
+  runner.run()

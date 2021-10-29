@@ -1,4 +1,4 @@
-from findr.run.run import Runner
+from findr.run.runner import Runner
 
 class Boot:
 
