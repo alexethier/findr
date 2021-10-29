@@ -1,6 +1,6 @@
 import argparse
 import logging
-from refactorr.find.file_filter_token import FilterToken
+from findr.api.file_filter_token import FilterToken
 
 # Project specific wrapper around argparse
 class Loader:

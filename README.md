@@ -1,2 +1,2 @@
-# refactorr
-Easily rename tokens in a project.
+# findr
+Walk a filesystem with configurable path and filename filters.

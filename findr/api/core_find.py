@@ -4,7 +4,7 @@ import os
 # Convert to separate repo that is pip installable
 # follow grep pattern: text | grep "include_string" | string -v "exclude_string" ...
 # So filters need to be applied in order, and follow similar inclusion/exclusion rules as a chained grep command
-class Findr:
+class Find:
 
   def __init__(self):
     pass
