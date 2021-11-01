@@ -1,9 +1,8 @@
 import os
 
-# TODO
-# Convert to separate repo that is pip installable
-# follow grep pattern: text | grep "include_string" | string -v "exclude_string" ...
-# So filters need to be applied in order, and follow similar inclusion/exclusion rules as a chained grep command
+# Filter files according to inclusion and exclusion rules. These rules follow a pattern similar to multiple grep commands piped together.
+# Inclusions and exclusions follow the commutative property. If there are multiple inclusions, each one must match to accept.
+# A single matching exclusion means no match.
 class Find:
 
   def __init__(self):
@@ -21,10 +20,10 @@ class Find:
 
     for matcher_filter_token in matcher_filter_include_list:
       token = matcher_filter_token.get_token()
-      if token in matcher:
-        return True
+      if token not in matcher:
+        return False
 
-    return False
+    return True
 
   # Recursively walk through filesystem and either include/exclude files and directories based on user input
   def find(self, scan_dir, file_filter_tokens):
@@ -43,9 +42,6 @@ class Find:
         filter_map["path"]["inclusive"].append(file_filter_token)
       if(not file_filter_token.is_filename_only() and not file_filter_token.is_inclusive()):
         filter_map["path"]["exclusive"].append(file_filter_token)
-
-      #else:
-      #  filter_map["path"]["exclusive"].append(file_filter_token)
 
       if(file_filter_token.is_filename_only()):
         if(file_filter_token.is_inclusive()):
@@ -68,9 +64,10 @@ class Find:
       index = 0;
       for name in dirs:
         path = root + os.path.sep + name
-        # First check exclusions only because we don't need to recurse if an exclusion applies early
+        # First check exclusions only because further checking is not required if the directly is excluded.
         match = self._check_match(path, filter_map["path"]["exclusive"], [])
         if(match):
+          # Next check inclusions only, and yield on a match
           match = self._check_match(path, [], filter_map["path"]["inclusive"])
           # Do not output any directories if matching inclusive filenames only
           if(match and len(filter_map["filename"]["inclusive"]) == 0):
@@ -84,6 +81,3 @@ class Find:
       for index in remove_dirs_index:
         del dirs[index - remove_count]
         remove_count = remove_count + 1
-        
-  #def run(self):
-  #  print("find - hi")

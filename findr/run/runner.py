@@ -10,7 +10,10 @@ class Runner:
   def run(self):
 
     loader = Loader()
-    loader.run()
+    continue_run = loader.run()
+    if(not continue_run):
+      return
+
     file_filter_tokens = loader.get_file_filter_tokens()
     for file_filter_token in file_filter_tokens:
       logging.debug("File filter token: " + str(file_filter_token))
