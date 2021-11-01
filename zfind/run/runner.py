@@ -1,5 +1,5 @@
-from findr.api.core_find import Find
-from findr.input.loader import Loader
+from zfind.api.core_find import Find
+from zfind.input.loader import Loader
 import logging
 
 class Runner:

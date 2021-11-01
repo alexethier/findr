@@ -3,7 +3,7 @@ from setuptools import setup
 
 found_packages = []
 found_package_dirs = {}
-project_name = "findr"
+project_name = "zfind"
 for root, dirs, files in os.walk("." + os.path.sep + project_name, topdown=True, followlinks=False):
   for name in files:
     if(name=="__init__.py"):
@@ -36,7 +36,7 @@ setup(
   ],
   entry_points={
       'console_scripts': [
-          'findr=findr.run.runner:main',
+          'zfind=zfind.run.runner:main',
       ],
   },
 )

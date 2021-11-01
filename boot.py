@@ -1,4 +1,4 @@
-from findr.run.runner import Runner
+from zfind.run.runner import Runner
 
 class Boot:
 

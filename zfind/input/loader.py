@@ -1,6 +1,6 @@
 import sys
 import logging
-from findr.api.file_filter_token import FilterToken
+from zfind.api.file_filter_token import FilterToken
 
 
 
