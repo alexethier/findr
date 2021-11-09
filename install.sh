@@ -61,7 +61,7 @@ fi
 
 if [ "$TEST_DEPLOY" == "true" ]; then
   echo "Uploading to test pypi"
-  #twine upload --repository testpypi dist/*
+  twine upload --repository testpypi dist/*
   pip list | tr -s ' ' | grep -e "^$PROJECT_NAME " | cut -d' ' -f1 | xargs -I {} pip uninstall -y {} || true
   echo "Reinstalling from test pypi"
   pip install --index-url https://test.pypi.org/simple/ $PROJECT_NAME
