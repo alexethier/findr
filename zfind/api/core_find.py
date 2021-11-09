@@ -53,6 +53,9 @@ class Find:
         else:
           filter_map["filename"]["exclusive"].append(file_filter_token)
 
+    # Track which directories have already been visited to prevent infinite loops
+    directory_map = {}
+
     # Note 'topdown' must be true if excluding directories when using the os.walk function
     for root, dirs, files in os.walk(scan_dir, topdown=True, followlinks=True):
 
@@ -76,7 +79,12 @@ class Find:
             match = self._check_match(path, [], filter_map["path"]["inclusive"])
             # Do not output any directories if matching inclusive filenames only
             if(match and len(filter_map["filename"]["inclusive"]) == 0):
-              yield root + os.path.sep + name + "/"
+              abs_dirpath = os.path.realpath(root + os.path.sep + name)
+              if(abs_dirpath not in directory_map):
+                directory_map[abs_dirpath] = None
+                yield root + os.path.sep + name + "/"
+              else:
+                remove_dirs_index.append(index)
         else:
           remove_dirs_index.append(index)
         index = index + 1
