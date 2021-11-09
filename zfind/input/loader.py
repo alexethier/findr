@@ -2,10 +2,6 @@ import sys
 import logging
 from zfind.api.file_filter_token import FilterToken
 
-
-
-
-# Project specific wrapper around argparse
 class Loader:
 
   def __init__(self):

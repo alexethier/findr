@@ -26,7 +26,11 @@ class Find:
     return True
 
   # Recursively walk through filesystem and either include/exclude files and directories based on user input
-  def find(self, scan_dir, file_filter_tokens):
+  #
+  # scan_dir - A path to the directory to recursively walk through
+  # file_filter_tokens - A list of file_filter_token objects which describe how to include/exclude files based on input patterns
+  # only_files - Set true to only yield files and exclude all directories from output
+  def find(self, scan_dir, file_filter_tokens, only_files=False):
 
     # Organize the file filter tokens into a map based on file or directory matching and inclusive or exclusive rules
     filter_map = {}
@@ -67,11 +71,12 @@ class Find:
         # First check exclusions only because further checking is not required if the directly is excluded.
         match = self._check_match(path, filter_map["path"]["exclusive"], [])
         if(match):
-          # Next check inclusions only, and yield on a match
-          match = self._check_match(path, [], filter_map["path"]["inclusive"])
-          # Do not output any directories if matching inclusive filenames only
-          if(match and len(filter_map["filename"]["inclusive"]) == 0):
-            yield root + os.path.sep + name + "/"
+          if(not only_files):
+            # Next check inclusions only, and yield on a match
+            match = self._check_match(path, [], filter_map["path"]["inclusive"])
+            # Do not output any directories if matching inclusive filenames only
+            if(match and len(filter_map["filename"]["inclusive"]) == 0):
+              yield root + os.path.sep + name + "/"
         else:
           remove_dirs_index.append(index)
         index = index + 1
