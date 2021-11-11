@@ -53,6 +53,9 @@ class Find:
         else:
           filter_map["filename"]["exclusive"].append(file_filter_token)
 
+    # Track which directories have already been visited to prevent infinite loops
+    directory_map = {}
+
     # Note 'topdown' must be true if excluding directories when using the os.walk function
     for root, dirs, files in os.walk(scan_dir, topdown=True, followlinks=True):
 
@@ -64,25 +67,28 @@ class Find:
           if(match):
             yield root + os.path.sep + name
 
-      remove_dirs_index = []
-      index = 0;
+      keep_dirs = []
       for name in dirs:
         path = root + os.path.sep + name
+
+        # Ensure the directory has not been visited before
+        abs_dirpath = os.path.realpath(path)
+        if(abs_dirpath in directory_map):
+          continue
+        else:
+          directory_map[abs_dirpath] = None
+
         # First check exclusions only because further checking is not required if the directly is excluded.
         match = self._check_match(path, filter_map["path"]["exclusive"], [])
         if(match):
+          keep_dirs.append(name)
           if(not only_files):
             # Next check inclusions only, and yield on a match
             match = self._check_match(path, [], filter_map["path"]["inclusive"])
             # Do not output any directories if matching inclusive filenames only
             if(match and len(filter_map["filename"]["inclusive"]) == 0):
               yield root + os.path.sep + name + "/"
-        else:
-          remove_dirs_index.append(index)
-        index = index + 1
 
-      # Note that when removing from the list, it shrinks so the indexes need to be modified by the remove count
-      remove_count = 0
-      for index in remove_dirs_index:
-        del dirs[index - remove_count]
-        remove_count = remove_count + 1
+      dirs.clear()
+      for name in keep_dirs:
+        dirs.append(name)
