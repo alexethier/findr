@@ -57,31 +57,6 @@ class Loader:
 
     return True
     
-    #log_info = args.v
-    #if(log_info):
-    #  logging.getLogger().setLevel(logging.INFO)
-    #log_debug = args.vv
-    #if(log_debug):
-    #  logging.getLogger().setLevel(logging.DEBUG)
-    #logging.debug("Debug logging enabled.")
-
-    ## Loop through unknown arguments, if any start with '-g' or '--g' the following unknown argument will 
-    #input_key = None
-    #for unknown_arg in unknown_arguments:
-    #  if(input_key != None):
-    #    parsed = self._load_file_filter_token(input_key, unknown_arg)
-    #    if(not parsed):
-    #      parser.parse_args()
-    #      break
-    #    input_key = None
-    #  elif(unknown_arg.startswith('-g')):
-    #    input_key = unknown_arg[2:]
-    #  elif(unknown_arg.startswith('--g')):
-    #    input_key = unknown_arg[3:]
-    #  else:
-    #    parser.parse_args()
-    #    break
-
   def _load_file_filter_token(self, input_key, token):
     input_chars = [char for char in input_key]
 
