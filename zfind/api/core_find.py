@@ -1,4 +1,5 @@
 import os
+import re
 
 # Filter files according to inclusion and exclusion rules. These rules follow a pattern similar to multiple grep commands piped together.
 # Inclusions and exclusions follow the commutative property. If there are multiple inclusions, each one must match to accept.
@@ -12,7 +13,11 @@ class Find:
 
     for matcher_filter_token in matcher_filter_exclude_list:
       token = matcher_filter_token.get_token()
-      if token in matcher:
+      is_regex = matcher_filter_token.is_regex()
+      if(is_regex):
+        if(re.match(token, matcher)):
+          return False
+      elif token in matcher:
         return False
 
     if(len(matcher_filter_include_list) == 0):
@@ -20,7 +25,11 @@ class Find:
 
     for matcher_filter_token in matcher_filter_include_list:
       token = matcher_filter_token.get_token()
-      if token not in matcher:
+      is_regex = matcher_filter_token.is_regex()
+      if(is_regex):
+        if(not re.match(token, matcher)):
+          return False
+      elif token not in matcher:
         return False
 
     return True

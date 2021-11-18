@@ -93,7 +93,6 @@ class Loader:
       if(char == "e"):
         inclusive = False
       elif(char == "r"):
-        raise "TODO: Support regex"
         regex = True
       elif(char == "f"):
         filename_only = True
