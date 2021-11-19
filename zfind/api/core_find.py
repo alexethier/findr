@@ -41,6 +41,9 @@ class Find:
   # only_files - Set true to only yield files and exclude all directories from output
   def find(self, scan_dir, file_filter_tokens, only_files=False):
 
+    if(scan_dir.endswith("/")):
+      scan_dir = scan_dir[:-1]
+
     # Organize the file filter tokens into a map based on file or directory matching and inclusive or exclusive rules
     filter_map = {}
     filter_map["path"] = {}

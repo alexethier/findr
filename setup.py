@@ -17,7 +17,7 @@ for root, dirs, files in os.walk("." + os.path.sep + project_name, topdown=True,
 
 setup(
   name=project_name,
-  version='0.0.6',
+  version='0.0.7',
   description='Walk a filesystem with configurable path and filename filters.',
   url='https://github.com/alexethier/findr',
   author='Alex Ethier',
