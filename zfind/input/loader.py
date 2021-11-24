@@ -1,11 +1,13 @@
 import sys
 import logging
 from zfind.api.file_filter_token import FilterToken
+from zfind.api.text_token import TextToken
 
 class Loader:
 
   def __init__(self):
     self._file_filter_tokens = []
+    self._text_tokens = []
 
   def print_arg_error(self, bad_arg):
     print("Error: Unknown input argument: " + bad_arg)
@@ -20,23 +22,36 @@ class Loader:
     logging.basicConfig()
     logging.getLogger().setLevel(logging.WARN)
 
-    input_key = None
+    input_file_key = None
+    input_text_key = None
     index = 1
     for index in range(1, len(sys.argv)):
       arg = sys.argv[index]
 
-      if(input_key != None):
-        parsed = self._load_file_filter_token(input_key, arg)
+      if(input_file_key != None):
+        parsed = self._load_file_filter_token(input_file_key, arg)
         if(not parsed):
           self.print_arg_error(sys.argv[index -1])
           self.print_help()
           return False
         else:
-          input_key = None
+          input_file_key = None
+      elif(input_text_key != None):
+        parsed = self._load_text_token(input_text_key, arg)
+        if(not parsed):
+          self.print_arg_error(sys.argv[index -1])
+          self.print_help()
+          return False
+        else:
+          input_text_key = None
       elif(arg.startswith('-g')):
-        input_key = arg[2:]
+        input_file_key = arg[2:]
       elif(arg.startswith('--g')):
-        input_key = arg[3:]
+        input_file_key = arg[3:]
+      elif(arg.startswith('-t')):
+        input_text_key = arg[2:]
+      elif(arg.startswith('--t')):
+        input_text_key = arg[3:]
       elif(arg == '-h' or arg == '--help'):
         self.print_help()
         return False
@@ -50,15 +65,15 @@ class Loader:
         self.print_help()
         return False
       
-    if(input_key is not None):
+    if(input_file_key is not None):
       print("Error: match token must follow expression '" + sys.argv[index] + "'")
       self.print_help()
       return False
 
     return True
     
-  def _load_file_filter_token(self, input_key, token):
-    input_chars = [char for char in input_key]
+  def _load_file_filter_token(self, input_file_key, token):
+    input_chars = [char for char in input_file_key]
 
     inclusive = True
     regex = False
@@ -78,5 +93,29 @@ class Loader:
     self._file_filter_tokens.append(filter_token)
     return True
 
+  def _load_text_token(self, input_text_key, token):
+    input_chars = [char for char in input_text_key]
+
+    inclusive = True
+    regex = False
+    case_sensitive = False
+
+    for char in input_chars:
+      if(char == "e"):
+        inclusive = False
+      elif(char == "r"):
+        regex = True
+      elif(char == "c"):
+        case_sensitive = True
+      else:
+        return False
+
+    text_token = TextToken(token, inclusive, regex, case_sensitive)
+    self._text_tokens.append(text_token)
+    return True
+
   def get_file_filter_tokens(self):
     return self._file_filter_tokens
+
+  def get_text_tokens(self):
+    return self._text_tokens

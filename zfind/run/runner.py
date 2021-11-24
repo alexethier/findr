@@ -1,4 +1,5 @@
 from zfind.api.core_find import Find
+from zfind.api.core_text_find import TextFind
 from zfind.input.loader import Loader
 import logging
 
@@ -20,10 +21,17 @@ class Runner:
       
 
     find = Find()
+    text_find = TextFind()
+
     file_matches = find.find(".", file_filter_tokens)
 
     for file_match in file_matches:
-      print(file_match)
+      if(len(loader.get_text_tokens()) == 0):
+        print(file_match)
+      elif(not file_match.endswith('/')):
+        lines = text_find.scan(file_match, loader.get_text_tokens())
+        for line in lines:
+          print(file_match + ": " + line.rstrip())
 
 def main():
   runner = Runner()
