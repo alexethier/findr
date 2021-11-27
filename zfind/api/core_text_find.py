@@ -27,6 +27,9 @@ class TextFind:
 
         lines = input_fd.readlines()
         for line in lines:
+
+          # First check for exclusions
+          skip = False
           for text_token in text_map["exclusive"]:
             case_sensitive = text_token.is_case_sensitive()
             regex = text_token.is_regex()
@@ -38,14 +41,17 @@ class TextFind:
 
             if(not regex):
               if(check_token in check_line):
-                yield line
+                skip = True
                 break
             else:
               if(re.match(check_token, check_line)):
-                yield line
+                skip = True
                 break
 
-        for line in lines:
+          if(skip):
+            continue
+
+          # Next check all inclusions
           all_match = True
           for text_token in text_map["inclusive"]:
             case_sensitive = text_token.is_case_sensitive()
